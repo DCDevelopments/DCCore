@@ -49,10 +49,16 @@ namespace DCCore.WebMvc.Controllers
         [HttpPost]
         public ActionResult Create(Group group)
         {
-            group.GroupId = Guid.NewGuid(); 
-
+           //obtengo el User.Identity de .Net
             var user = User.Identity;
-            var userIdentityOwn = new IdentityUser() { UserName = user.Name,Id=getGuid(user.GetUserId())};
+            //creo nuestro objeto IdentityUser apartir del de .Net
+            var userIdentityOwn = new IdentityUser()
+            {
+                UserName = user.Name,
+                Id =getGuid(user.GetUserId())
+            };
+
+            //en este metodo creo el grupo y lo asigno al usuario
             _groupManager.CreateGroup(group, userIdentityOwn);
             return RedirectToAction("Index");
         }

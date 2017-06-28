@@ -52,23 +52,24 @@ namespace DCCore.WebMvc.Stores
         {
             if (group == null)
                 throw new ArgumentNullException("group");
-
             var g = getGroup(group);
+            //seteo el guid nuevo para el grupo
+            g.GroupId = Guid.NewGuid();
+            //lo agrego a la tabla group
             _unitOfWork.GroupRepository.Add(g);
-
-            _unitOfWork.SaveChanges();
-
+            //busco el usuario            
             var u = _unitOfWork.UserRepository.FindById(user.Id);
             if (u == null)
                 throw new ArgumentException("No existe el usuario", "user");
-           
+           //busco el group para ese grupo insertado
             var r = _unitOfWork.GroupRepository.FindById(g.GroupId);
             if (r == null)
                 throw new ArgumentException("El id de grupo no corresponde a una entidad de Group", "groupName");
-                                                   
+             //inserto en la tabla intermedia el grupo                                      
              u.Groups.Add(r);
+            //actualizo todo lo referente a user 
             _unitOfWork.UserRepository.Update(u);
-
+            //guardo los cambios
             return _unitOfWork.SaveChanges();
         }
 
