@@ -1,4 +1,5 @@
 ﻿using DCCore.Domain;
+using DCCore.Domain.Entities;
 using DCCore.WebMvc.Identity;
 using System;
 using System.Collections.Generic;
@@ -17,16 +18,14 @@ namespace DCCore.WebMvc.Stores
             _unitOfWork = unitOfWork;
         }
 
-        public Task<IList<string>> GetGroupsAsync(IdentityUser user)
+        public IQueryable<Group> Groups
         {
-            if (user == null)
-                throw new ArgumentNullException("user");
-
-            var u = _unitOfWork.UserRepository.FindById(user.Id);
-            if (u == null)
-                throw new ArgumentException("IdentityUser does not correspond to a User entity.", "user");
-
-            return Task.FromResult<IList<string>>(u.Groups.Select(x => x.Name).ToList());
+            get
+            {
+                return _unitOfWork.GroupRepository
+                    .GetAll()                    
+                    .AsQueryable();
+            }
         }
 
         public int AddToGroup(string userid, string groupid)
@@ -49,6 +48,31 @@ namespace DCCore.WebMvc.Stores
             return _unitOfWork.SaveChanges();
         }
 
+        public int CreateGroup(Group group, IdentityUser user)
+        {
+            if (group == null)
+                throw new ArgumentNullException("group");
+
+            var g = getGroup(group);
+            _unitOfWork.GroupRepository.Add(g);
+
+            _unitOfWork.SaveChanges();
+
+            var u = _unitOfWork.UserRepository.FindById(user.Id);
+            if (u == null)
+                throw new ArgumentException("No existe el usuario", "user");
+           
+            var r = _unitOfWork.GroupRepository.FindById(g.GroupId);
+            if (r == null)
+                throw new ArgumentException("El id de grupo no corresponde a una entidad de Group", "groupName");
+                                                   
+             u.Groups.Add(r);
+            _unitOfWork.UserRepository.Update(u);
+
+            return _unitOfWork.SaveChanges();
+        }
+
+
         public Task AddToGroupAsync(string userid, string groupid)
         {
             if (userid == null)
@@ -62,7 +86,7 @@ namespace DCCore.WebMvc.Stores
             var r = _unitOfWork.GroupRepository.FindById(groupid);
             if (r == null)
                 throw new ArgumentException("roleName does not correspond to a Role entity.", "roleName");
-
+            
             u.Groups.Add(r);
             _unitOfWork.UserRepository.Update(u);
 
@@ -102,5 +126,18 @@ namespace DCCore.WebMvc.Stores
             _unitOfWork.UserRepository.Update(u);
             return _unitOfWork.SaveChanges();
         }
+
+        #region Private Methods
+        private Group getGroup(Group group)
+        {
+            if (group == null)
+                return null;
+            return new Group
+            {
+                GroupId = group.GroupId,
+                Name = group.Name
+            };
+        }
+        #endregion
     }
 }

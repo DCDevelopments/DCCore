@@ -14,8 +14,7 @@ namespace DCCore.Domain.Entities
 
         #region Scalar Properties
         public Guid GroupId { get; set; }
-        public string Name { get; set; }
-        public bool Manager { get; set; }
+        public string Name { get; set; }        
         #endregion
 
         #region Navigation Properties

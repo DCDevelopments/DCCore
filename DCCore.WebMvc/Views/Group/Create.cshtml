@@ -1,7 +1,13 @@
-﻿
+﻿@model DCCore.Domain.Entities.Group
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Agregar Nuevo Grupo";
 }
+<h2>Add New User Role:</h2>
 
-<h2>Create</h2>
+@using (Html.BeginForm())
+{
+    <p> Enter User Role Name:</p>
 
+    @Html.EditorFor(m => m.Name)
+    <input type="submit" value="Crear Grupo" />
+}

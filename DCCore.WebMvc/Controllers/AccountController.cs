@@ -80,16 +80,44 @@ namespace DCCore.WebMvc.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    ExchangeEmailService serviceMail = new ExchangeEmailService();
+                    
                     await SignInAsync(user, isPersistent: false);
                     await this._userManager.AddToRoleAsync(user.Id, "Usuario");
-                    //await serviceMail.SendEmailAsync(user.UserName, "Account created", "Nice email content.");
                     return RedirectToAction("Index", "User");
                 }
 
             
                 AddErrors(result);
                 
+
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        // POST: /Account/RegisterWithConfirmationEmail
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterWithConfirmationEmail(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser() { UserName = model.UserName };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    ExchangeEmailService serviceMail = new ExchangeEmailService();
+                    await SignInAsync(user, isPersistent: false);
+                    await this._userManager.AddToRoleAsync(user.Id, "Usuario");
+                    await serviceMail.SendEmailAsync(user.UserName, "Account created", "Nice email content.");
+                    return RedirectToAction("Index", "User");
+                }
+
+
+                AddErrors(result);
+
 
             }
 
