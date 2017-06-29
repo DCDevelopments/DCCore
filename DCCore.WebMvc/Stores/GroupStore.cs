@@ -1,6 +1,7 @@
 ﻿using DCCore.Domain;
 using DCCore.Domain.Entities;
 using DCCore.WebMvc.Identity;
+using DCCore.WebMvc.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,41 @@ namespace DCCore.WebMvc.Stores
             _unitOfWork = unitOfWork;
         }
 
-        public IQueryable<Group> Groups
+        public IQueryable<Group> Groups(User user)
         {
-            get
+            var u = _unitOfWork.UserRepository.FindById(user.UserId);
+
+            var groups = u.Groups.Select(x => x).ToList();
+
+            return groups.AsQueryable();
+                
+        }
+
+        public List<GroupCheckBoxListUserViewModel> Users(User user)
+        {
+            var u = _unitOfWork.UserRepository.FindById(user.UserId);
+
+             var groups = u.Groups.Select(x => x).ToList();
+
+
+            var users = _unitOfWork.UserRepository
+                .GetAll()
+                .Where(x => x.UserId != u.UserId)
+                .AsQueryable();
+
+            List<GroupCheckBoxListUserViewModel> listchecks= new List<GroupCheckBoxListUserViewModel>();
+
+            foreach (var us in users)
             {
-                return _unitOfWork.GroupRepository
-                    .GetAll()                    
-                    .AsQueryable();
+                var GroupCheckBoxListUserViewModel = new GroupCheckBoxListUserViewModel();
+                GroupCheckBoxListUserViewModel.UserId = us.UserId;
+                GroupCheckBoxListUserViewModel.UserName = us.UserName;
+                GroupCheckBoxListUserViewModel.IsSelected = false;
+                listchecks.Add(GroupCheckBoxListUserViewModel);
             }
+
+            return listchecks;
+
         }
 
         public int AddToGroup(string userid, string groupid)

@@ -26,12 +26,36 @@ namespace DCCore.WebMvc.Controllers
             _groupManager = groupManager;
         }
 
-        // GET: Group
+        // GET: Group/Index
         public ActionResult Index()
         {
-            var Groups =_groupManager.Groups;
+            //obtengo el User.Identity de .Net
+            var userIdentity = User.Identity;
+            //creo nuestro objeto IdentityUser apartir del de .Net
+            var user= new User()
+            {
+                UserName = userIdentity.Name,
+                UserId = getGuid(userIdentity.GetUserId())
+            };
+            var Groups =_groupManager.Groups(user);
             return View(Groups);
         }
+
+        // GET: Group/AddUsersInGroup
+        public ActionResult AddUsersInGroup()
+        {
+            //obtengo el User.Identity de .Net
+            var userIdentity = User.Identity;
+            //creo nuestro objeto IdentityUser apartir del de .Net
+            var user = new User()
+            {
+                UserName = userIdentity.Name,
+                UserId = getGuid(userIdentity.GetUserId())
+            };
+            var Groups = _groupManager.Users(user);
+            return View(Groups);
+        }
+
         /// <summary>
 		/// Create  a New role
 		/// </summary>

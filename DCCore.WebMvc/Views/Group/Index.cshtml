@@ -19,7 +19,7 @@
                 {
                     <tr>
                         <td style="width:100%; border:dotted 1px;">
-                            @item.Name
+                            @Html.ActionLink(@item.Name, "AddUsersInGroup", "Group", new { id = item.GroupId })
                         </td>
                     </tr>}
             </table>
