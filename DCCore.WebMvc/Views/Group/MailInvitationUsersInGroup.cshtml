@@ -13,6 +13,7 @@
             <tr>
                 <td>
                     @Html.HiddenFor(it => it[i].UserId)
+                    @Html.HiddenFor(it => it[i].UserName)
                     @Html.DisplayFor(it => it[i].UserName)
                 </td>
                 <td>
@@ -23,7 +24,7 @@
 
     }
 
-    <input id="Submit1" type="submit" value="submit" />
+    <input id="Submit1" type="submit" value="Invitar" />
 
 }
   

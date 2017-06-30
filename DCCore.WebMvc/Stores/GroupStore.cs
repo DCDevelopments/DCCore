@@ -19,6 +19,13 @@ namespace DCCore.WebMvc.Stores
             _unitOfWork = unitOfWork;
         }
 
+        public Task<User> FindByIdAsync(Guid userId)
+        {
+            var user = _unitOfWork.UserRepository.FindById(userId);
+            return Task.FromResult<User>(user);
+        }
+
+
         public IQueryable<Group> Groups(User user)
         {
             var u = _unitOfWork.UserRepository.FindById(user.UserId);

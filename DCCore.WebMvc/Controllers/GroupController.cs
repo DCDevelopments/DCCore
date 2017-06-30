@@ -14,6 +14,7 @@ using DCCore.WebMvc.Utils;
 using static DCCore.WebMvc.Utils.ExchangeEmailService;
 using DCCore.WebMvc.Stores;
 using DCCore.Domain.Entities;
+using System.Collections.Generic;
 
 namespace DCCore.WebMvc.Controllers
 {
@@ -42,7 +43,7 @@ namespace DCCore.WebMvc.Controllers
         }
 
         // GET: Group/AddUsersInGroup
-        public ActionResult AddUsersInGroup()
+        public ActionResult MailInvitationUsersInGroup()
         {
             //obtengo el User.Identity de .Net
             var userIdentity = User.Identity;
@@ -56,11 +57,50 @@ namespace DCCore.WebMvc.Controllers
             return View(Groups);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> MailInvitationUsersInGroup(List<GroupCheckBoxListUserViewModel> list)
+        {
+            ExchangeEmailService serviceMail = new ExchangeEmailService();
+            string body;
+
+            foreach (var group in list)
+            {
+                if (group.IsSelected)
+                {
+                    body = string.Format(
+                        "Dear {0} < BR /> Thank you for your registration, please click on the" +
+                        "below link to complete your registration: < a href =\"{1}\" " +
+                        "title =\"User Email Confirm\">{1}</a>",
+                        group.UserName, Url.Action("ConfirmAddGroup", "Group",
+                        new { Token = group.UserId, Email = group.UserName }, Request.Url.Scheme));
+
+                    await serviceMail.SendEmailAsync(group.UserName, "Confirm Group", body);
+                }
+            }
+
+            return View(list);
+        }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmAddGroup(string Token, string Email)
+        { 
+                return RedirectToAction("Index", "Home");
+               
+        }
+
+
+        [AllowAnonymous]
+        public ActionResult Confirm(string Email)
+        {
+            ViewBag.Email = Email; return View();
+        }
+
         /// <summary>
-		/// Create  a New role
-		/// </summary>
-		/// <returns></returns>
-		public ActionResult Create()
+        /// Create  a New Group
+        /// </summary>
+        /// <returns></returns>
+        /// GET: Group/Create
+        public ActionResult Create()
         {
             var Group = new Group();
             return View(Group);
@@ -70,6 +110,7 @@ namespace DCCore.WebMvc.Controllers
         /// </summary>
         /// <param name="Group"></param>
         /// <returns></returns>
+        /// POST: Group/Create
         [HttpPost]
         public ActionResult Create(Group group)
         {
@@ -86,6 +127,11 @@ namespace DCCore.WebMvc.Controllers
             _groupManager.CreateGroup(group, userIdentityOwn);
             return RedirectToAction("Index");
         }
+        /// <summary>
+        /// Method common in controllers
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         private Guid getGuid(string value)
         {
             var result = default(Guid);

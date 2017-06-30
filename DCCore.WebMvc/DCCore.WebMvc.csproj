@@ -283,7 +283,8 @@
     <Content Include="Views\Role\Create.cshtml" />
     <Content Include="Views\Group\Index.cshtml" />
     <Content Include="Views\Group\Create.cshtml" />
-    <Content Include="Views\Group\AddUsersInGroup.cshtml" />
+    <Content Include="Views\Group\MailInvitationUsersInGroup.cshtml" />
+    <Content Include="Views\Group\Confirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DCCore.Domain\DCCore.Domain.csproj">
