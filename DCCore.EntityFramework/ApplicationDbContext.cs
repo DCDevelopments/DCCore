@@ -20,6 +20,8 @@ namespace DCCore.EntityFramework
         internal IDbSet<Role> Roles { get; set; }
         internal IDbSet<Group> Groups { get; set; }
         internal IDbSet<ExternalLogin> Logins { get; set; }
+        internal IDbSet<Mail> Mails { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -28,9 +30,10 @@ namespace DCCore.EntityFramework
             modelBuilder.Configurations.Add(new GroupConfiguration());
             modelBuilder.Configurations.Add(new ExternalLoginConfiguration());
             modelBuilder.Configurations.Add(new ClaimConfiguration());
+            modelBuilder.Configurations.Add(new MailConfiguration());
 
-                      
-            
+
+
         }
         
     }

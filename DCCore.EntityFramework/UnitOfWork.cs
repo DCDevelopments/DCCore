@@ -17,6 +17,7 @@ namespace DCCore.EntityFramework
         private IRoleRepository _roleRepository;
         private IUserRepository _userRepository;
         private IGroupRepository _groupRepository;
+        private IMailRepository _mailRepository;
         #endregion
 
         #region Constructors
@@ -47,6 +48,11 @@ namespace DCCore.EntityFramework
 
             get { return _groupRepository ?? (_groupRepository = new GroupRepository(_context)); }
         }
+        public IMailRepository MailRepository
+        {
+
+            get { return _mailRepository ?? (_mailRepository = new MailRepository(_context)); }
+        }
 
         public int SaveChanges()
         {
@@ -71,6 +77,7 @@ namespace DCCore.EntityFramework
             _roleRepository = null;
             _groupRepository = null;
             _userRepository = null;
+            _mailRepository = null;
             _context.Dispose();
         }
         #endregion

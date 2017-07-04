@@ -15,6 +15,7 @@ namespace DCCore.Domain
         IRoleRepository RoleRepository { get; }
         IGroupRepository GroupRepository { get; }
         IUserRepository UserRepository { get; }
+        IMailRepository MailRepository { get; }
         #endregion
 
         #region Methods

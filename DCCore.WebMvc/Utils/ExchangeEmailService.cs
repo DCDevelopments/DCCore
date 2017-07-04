@@ -24,11 +24,11 @@ namespace DCCore.WebMvc.Utils
             using (var client = new SmtpClient())
             {
                 client.Host = "smtp.gmail.com";
-                client.Port = 587;
-                client.EnableSsl = false;
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = true;
-                client.Credentials = new NetworkCredential("cristianramos83@gmail.com", "xxxxxx");
+                client.Port = 465;
+                client.EnableSsl = true;
+                //client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("cristianramos83@gmail.com", "alberto99");
                 
                 var from = new MailAddress("no-reply@example.com");
                 var to = new MailAddress(email);

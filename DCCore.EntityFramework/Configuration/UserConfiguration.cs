@@ -64,6 +64,10 @@ namespace DCCore.EntityFramework.Configuration
             HasMany(x => x.Logins)
                 .WithRequired(x => x.User)
                 .HasForeignKey(x => x.UserId);
+
+            HasMany(x => x.Mails)
+                .WithRequired(x => x.User)
+                .HasForeignKey(x => x.UserId);
         }
     }
 }

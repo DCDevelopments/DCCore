@@ -13,6 +13,7 @@ namespace DCCore.Domain.Entities
         private ICollection<ExternalLogin> _externalLogins;
         private ICollection<Role> _roles;
         private ICollection<Group> _groups;
+        private ICollection<Mail> _mails;
         #endregion
 
         #region Scalar Properties
@@ -45,6 +46,11 @@ namespace DCCore.Domain.Entities
         {
             get { return _groups ?? (_groups = new List<Group>()); }
             set { _groups = value; }
+        }
+        public virtual ICollection<Mail> Mails
+        {
+            get { return _mails ?? (_mails = new List<Mail>()); }
+            set { _mails = value; }
         }
 
         #endregion

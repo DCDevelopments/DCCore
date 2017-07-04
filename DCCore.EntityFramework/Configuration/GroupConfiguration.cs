@@ -34,6 +34,15 @@ namespace DCCore.EntityFramework.Configuration
                     x.MapLeftKey("GroupId");
                     x.MapRightKey("UserId");
                 });
+
+            HasMany(x => x.Mails)
+               .WithMany(x => x.Groups)
+               .Map(x =>
+               {
+                   x.ToTable("MailGroup");
+                   x.MapLeftKey("GroupId");
+                   x.MapRightKey("MailId");
+               });
         }
     }
 

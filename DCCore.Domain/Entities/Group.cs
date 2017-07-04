@@ -10,6 +10,7 @@ namespace DCCore.Domain.Entities
     {
         #region Fields
         private ICollection<User> _users;
+        private ICollection<Mail> _mails;
         #endregion
 
         #region Scalar Properties
@@ -22,6 +23,11 @@ namespace DCCore.Domain.Entities
         {
             get { return _users ?? (_users = new List<User>()); }
             set { _users = value; }
+        }
+        public ICollection<Mail> Mails
+        {
+            get { return _mails ?? (_mails = new List<Mail>()); }
+            set { _mails = value; }
         }
         #endregion
 
