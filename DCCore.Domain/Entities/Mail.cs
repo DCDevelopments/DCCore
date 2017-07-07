@@ -1,4 +1,5 @@
 ﻿using DCCore.Domain.Entities;
+using DCCore.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace DCCore.Domain.Entities
         #region Scalar Properties
         public virtual Guid MailId { get; set; }
         public virtual Guid UserId { get; set; }
-        public virtual int MailState{ get; set; }
+        public virtual int MailState { get; set; }
         #endregion
 
         #region Navigation Properties

@@ -31,6 +31,14 @@ namespace DCCore.EntityFramework.Repositories
             return Set.FirstOrDefaultAsync(x => x.UserName == username, cancellationToken);
         }
 
-        
+        public User FindByEmail(string email)
+        {
+            return Set.FirstOrDefault(x => x.Email == email);
+        }
+
+        public Task<User> FindByEmailAsync(string email)
+        {
+            return Set.FirstOrDefaultAsync(x => x.Email == email);
+        }
     }
 }

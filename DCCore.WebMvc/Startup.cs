@@ -24,7 +24,7 @@ namespace DCCore.WebMvc
             RoleStore roleStore = new RoleStore(_unitOfWork);
 
 
-            var existAdmin = userStore.FindByNameAsync("admin@admin.com").Result;
+            var existAdmin = userStore.FindByNameAsync("admin").Result;
 
             if (existAdmin == null)
             {
@@ -37,9 +37,11 @@ namespace DCCore.WebMvc
                 roleStore.Create(roleUsuario);
 
                 var userAdmin = new IdentityUser();
-                userAdmin.UserName = "admin@admin.com";
-                userAdmin.PasswordHash = "AD3JTWDbk/9jMgSnP0OjwvwyhYrIbE3G1VyylFXYhyf9quu1l06Om2gsyNBYh86J6A==";
-                userAdmin.SecurityStamp = "1baa6902-064e-4fcf-a006-46ddd6596fa5";
+                userAdmin.UserName = "admin";
+                userAdmin.Email = "admin@admin.com";
+                //12345678
+                userAdmin.PasswordHash = "AKN/vFTx1ENubiEyo8C8sdZI3eMrcAFVApbyVoTHqRV5JW8qFbi1H9R78a9NOfSdxA==";
+                userAdmin.SecurityStamp = "a8755046-a700-4291-96bf-b66a6db1f73b";
                 userStore.Create(userAdmin);
                 userStore.AddToRole(userAdmin, "Admin");
 

@@ -76,14 +76,14 @@ namespace DCCore.WebMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser() { UserName = model.UserName };
+                var user = new IdentityUser() { UserName = model.UserName,Email=model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
+                
                 if (result.Succeeded)
-                {
-                    
-                    await SignInAsync(user, isPersistent: false);
-                    await this._userManager.AddToRoleAsync(user.Id, "Usuario");
-                    return RedirectToAction("Index", "User");
+                {                  
+                        await SignInAsync(user, isPersistent: false);
+                        await _userManager.AddToRoleAsync(user.Id, "Usuario");
+                        return RedirectToAction("Index", "User");                  
                 }
 
             
@@ -439,6 +439,31 @@ namespace DCCore.WebMvc.Controllers
             Guid.TryParse(value, out result);
             return result;
         }
+        #endregion
+        #region validations 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult CheckEmailExist(string email)
+        {
+           
+            var emailExist = _userManager.FindByEmailAsync(email).Result;
+            if (emailExist != null)
+            {
+                return Content("false");
+            }
+            else
+            {
+            //    ModelState state = ModelState["Email"];
+            //    if (state != null)
+            //    {
+            //        state.Errors.Clear();
+            //    }
+                return Content("true");
+               
+            }
+        }
+       
+
         #endregion
     }
 }

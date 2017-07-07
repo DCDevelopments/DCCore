@@ -12,6 +12,8 @@ namespace DCCore.Domain.Repositories
     {
         User FindByUserName(string username);
         Task<User> FindByUserNameAsync(string username);
+        User FindByEmail(string email);
+        Task<User> FindByEmailAsync(string email);
         Task<User> FindByUserNameAsync(CancellationToken cancellationToken, string username);       
     }
 }

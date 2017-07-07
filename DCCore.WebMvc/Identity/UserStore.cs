@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Security.Claims;
 using Entities = DCCore.Domain.Entities;
+using DCCore.Domain.Entities;
 
 namespace DCCore.WebMvc.Identity
 { 
- public class UserStore : IUserLoginStore<IdentityUser, Guid>, IUserClaimStore<IdentityUser, Guid>, IUserRoleStore<IdentityUser, Guid>, IUserPasswordStore<IdentityUser, Guid>, IUserSecurityStampStore<IdentityUser, Guid>, IUserStore<IdentityUser, Guid>, IDisposable
+ public class UserStore : IUserLoginStore<IdentityUser, Guid>,IUserRoleStore<IdentityUser, Guid>, IUserPasswordStore<IdentityUser, Guid>, IUserSecurityStampStore<IdentityUser, Guid>, IUserStore<IdentityUser, Guid>, IDisposable, IUserEmailStore<IdentityUser, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -18,16 +19,14 @@ namespace DCCore.WebMvc.Identity
     {
         _unitOfWork = unitOfWork;
     }
-
+    
     #region IUserStore<IdentityUser, Guid> Members
     public Task CreateAsync(IdentityUser user)
     {
         if (user == null)
             throw new ArgumentNullException("user");
-
-        var u = getUser(user);
-
-        _unitOfWork.UserRepository.Add(u);
+            var u = getUser(user);
+            _unitOfWork.UserRepository.Add(u);          
         return _unitOfWork.SaveChangesAsync();
     }
     public int Create(IdentityUser user)
@@ -35,7 +34,7 @@ namespace DCCore.WebMvc.Identity
         if (user == null)
             throw new ArgumentNullException("user");
 
-        var u = getUser(user);
+            var u = getUser(user);
 
         _unitOfWork.UserRepository.Add(u);
         return _unitOfWork.SaveChanges();
@@ -86,60 +85,60 @@ namespace DCCore.WebMvc.Identity
     }
     #endregion
 
-    #region IUserClaimStore<IdentityUser, Guid> Members
-    public Task AddClaimAsync(IdentityUser user, Claim claim)
-    {
-        if (user == null)
-            throw new ArgumentNullException("user");
-        if (claim == null)
-            throw new ArgumentNullException("claim");
+    //#region IUserClaimStore<IdentityUser, Guid> Members
+    //public Task AddClaimAsync(IdentityUser user, Entities.Claim claim)
+    //{
+    //    if (user == null)
+    //        throw new ArgumentNullException("user");
+    //    if (claim == null)
+    //        throw new ArgumentNullException("claim");
 
-        var u = _unitOfWork.UserRepository.FindById(user.Id);
-        if (u == null)
-            throw new ArgumentException("IdentityUser does not correspond to a User entity.", "user");
+    //    var u = _unitOfWork.UserRepository.FindById(user.Id);
+    //    if (u == null)
+    //        throw new ArgumentException("IdentityUser does not correspond to a User entity.", "user");
 
-        var c = new Entities.Claim
-        {
-            ClaimType = claim.Type,
-            ClaimValue = claim.Value,
-            User = u
-        };
-        u.Claims.Add(c);
+    //    var c = new Entities.Claim
+    //    {
+    //        ClaimType = claim.Type,
+    //        ClaimValue = claim.Value,
+    //        User = u
+    //    };
+    //    u.Claims.Add(c);
 
-        _unitOfWork.UserRepository.Update(u);
-        return _unitOfWork.SaveChangesAsync();
-    }
+    //    _unitOfWork.UserRepository.Update(u);
+    //    return _unitOfWork.SaveChangesAsync();
+    //}
 
-    public Task<IList<Claim>> GetClaimsAsync(IdentityUser user)
-    {
-        if (user == null)
-            throw new ArgumentNullException("user");
+    //public Task<IList<Entities.Claim>> GetClaimsAsync(IdentityUser user)
+    //{
+    //    if (user == null)
+    //        throw new ArgumentNullException("user");
 
-        var u = _unitOfWork.UserRepository.FindById(user.Id);
-        if (u == null)
-            throw new ArgumentException("IdentityUser does not correspond to a User entity.", "user");
+    //    var u = _unitOfWork.UserRepository.FindById(user.Id);
+    //    if (u == null)
+    //        throw new ArgumentException("IdentityUser does not correspond to a User entity.", "user");
 
-        return Task.FromResult<IList<Claim>>(u.Claims.Select(x => new Claim(x.ClaimType, x.ClaimValue)).ToList());
-    }
+    //    return Task.FromResult<IList<Entities.Claim>>(u.Claims.Select(x => new Entities.Claim(x.ClaimType, x.ClaimValue)).ToList());
+    //}
 
-    public Task RemoveClaimAsync(IdentityUser user, Claim claim)
-    {
-        if (user == null)
-            throw new ArgumentNullException("user");
-        if (claim == null)
-            throw new ArgumentNullException("claim");
+    //public Task RemoveClaimAsync(IdentityUser user, Entities.Claim claim)
+    //{
+    //    if (user == null)
+    //        throw new ArgumentNullException("user");
+    //    if (claim == null)
+    //        throw new ArgumentNullException("claim");
 
-        var u = _unitOfWork.UserRepository.FindById(user.Id);
-        if (u == null)
-            throw new ArgumentException("IdentityUser does not correspond to a User entity.", "user");
+    //    var u = _unitOfWork.UserRepository.FindById(user.Id);
+    //    if (u == null)
+    //        throw new ArgumentException("IdentityUser does not correspond to a User entity.", "user");
 
-        var c = u.Claims.FirstOrDefault(x => x.ClaimType == claim.Type && x.ClaimValue == claim.Value);
-        u.Claims.Remove(c);
+    //    var c = u.Claims.FirstOrDefault(x => x.ClaimType == claim.Type && x.ClaimValue == claim.Value);
+    //    u.Claims.Remove(c);
 
-        _unitOfWork.UserRepository.Update(u);
-        return _unitOfWork.SaveChangesAsync();
-    }
-    #endregion
+    //    _unitOfWork.UserRepository.Update(u);
+    //    return _unitOfWork.SaveChangesAsync();
+    //}
+    //#endregion
 
     #region IUserLoginStore<IdentityUser, Guid> Members
     public Task AddLoginAsync(IdentityUser user, UserLoginInfo login)
@@ -349,6 +348,7 @@ namespace DCCore.WebMvc.Identity
     {
         user.UserId = identityUser.Id;
         user.UserName = identityUser.UserName;
+        user.Email = identityUser.Email;
         user.PasswordHash = identityUser.PasswordHash;
         user.SecurityStamp = identityUser.SecurityStamp;
     }
@@ -368,9 +368,39 @@ namespace DCCore.WebMvc.Identity
     {
         identityUser.Id = user.UserId;
         identityUser.UserName = user.UserName;
+        identityUser.Email = user.Email;
         identityUser.PasswordHash = user.PasswordHash;
         identityUser.SecurityStamp = user.SecurityStamp;
     }
-    #endregion
-}
+ #endregion
+
+        public Task SetEmailAsync(IdentityUser user, string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetEmailAsync(IdentityUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(IdentityUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetEmailConfirmedAsync(IdentityUser user, bool confirmed)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityUser> FindByEmailAsync(string email)
+        {
+            var user = _unitOfWork.UserRepository.FindByEmail(email);
+            return Task.FromResult<IdentityUser>(getIdentityUser(user));
+        }
+        
+       
+
+    }
 }

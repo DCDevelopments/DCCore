@@ -18,6 +18,7 @@ namespace DCCore.WebMvc.Identity
         
 
         public string UserName { get; set; }
+        public string Email { get; set; }
         public virtual string PasswordHash { get; set; }
         public virtual string SecurityStamp { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace DCCore.WebMvc.Models
 {
@@ -8,6 +9,7 @@ namespace DCCore.WebMvc.Models
         [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }
+
     }
 
     public class ManageUserViewModel
@@ -25,7 +27,7 @@ namespace DCCore.WebMvc.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -51,6 +53,12 @@ namespace DCCore.WebMvc.Models
         public string UserName { get; set; }
 
         [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        [Remote("CheckEmailExist", "Account",AdditionalFields = "Email", ErrorMessage = "El email ya existe",HttpMethod ="POST")  ]
+        public string Email { get; set; }
+
+        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
@@ -58,7 +66,7 @@ namespace DCCore.WebMvc.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
      }
