@@ -42,7 +42,7 @@ namespace DCCore.WebMvc.Controllers
             return View(Groups);
         }
 
-        // GET: Group/AddUsersInGroup
+        // GET: Group/Add Users In Group by invitation in Email
         public ActionResult MailInvitationUsersInGroup()
         {
             //obtengo el User.Identity de .Net
@@ -58,6 +58,7 @@ namespace DCCore.WebMvc.Controllers
         }
 
         [HttpPost]
+        // POST: Group/Add Users In Group by invitation in Email
         public async Task<ActionResult> MailInvitationUsersInGroup(List<GroupCheckBoxListUserViewModel> list)
         {
             ExchangeEmailService serviceMail = new ExchangeEmailService();
@@ -72,9 +73,9 @@ namespace DCCore.WebMvc.Controllers
                         "below link to complete your registration: < a href =\"{1}\" " +
                         "title =\"User Email Confirm\">{1}</a>",
                         group.UserName, Url.Action("ConfirmAddGroup", "Group",
-                        new { Token = group.UserId, Email = group.UserName }, Request.Url.Scheme));
+                        new { Token = group.UserId, Email = group.Email }, Request.Url.Scheme));
 
-                    await serviceMail.SendEmailAsync(group.UserName, "Confirm Group", body);
+                    await serviceMail.SendEmailAsync(group.Email, "Confirm Group", body);
                 }
             }
 
@@ -82,10 +83,9 @@ namespace DCCore.WebMvc.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmAddGroup(string Token, string Email)
+        public ActionResult ConfirmAddGroup(string Token, string Email)
         { 
-                return RedirectToAction("Index", "Home");
-               
+                return RedirectToAction("Index", "Home");               
         }
 
 

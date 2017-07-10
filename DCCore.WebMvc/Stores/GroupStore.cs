@@ -55,6 +55,7 @@ namespace DCCore.WebMvc.Stores
                 var GroupCheckBoxListUserViewModel = new GroupCheckBoxListUserViewModel();
                 GroupCheckBoxListUserViewModel.UserId = us.UserId;
                 GroupCheckBoxListUserViewModel.UserName = us.UserName;
+                GroupCheckBoxListUserViewModel.Email = us.Email;
                 GroupCheckBoxListUserViewModel.IsSelected = false;
                 listchecks.Add(GroupCheckBoxListUserViewModel);
             }

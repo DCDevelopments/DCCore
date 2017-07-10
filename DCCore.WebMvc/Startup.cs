@@ -19,7 +19,7 @@ namespace DCCore.WebMvc
         private  void createRolesUserAsync()
         {
 
-            UnitOfWork _unitOfWork = new UnitOfWork("DevelopmentHouseCristian");
+            UnitOfWork _unitOfWork = new UnitOfWork("Development");
             UserStore userStore = new UserStore(_unitOfWork);
             RoleStore roleStore = new RoleStore(_unitOfWork);
 

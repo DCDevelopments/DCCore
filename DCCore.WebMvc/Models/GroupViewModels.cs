@@ -12,5 +12,6 @@ namespace DCCore.WebMvc.Models
         public string UserName { get; set; }
         public Guid UserId { get; set; }
         public bool IsSelected { get; set; }
+        public string Email { get; set; }
     }
 }
