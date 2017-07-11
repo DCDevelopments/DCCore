@@ -19,7 +19,7 @@ namespace DCCore.WebMvc.App_Start
         {
             var container = new UnityContainer();
 
-            container.RegisterType<IUnitOfWork, UnitOfWork>(new HierarchicalLifetimeManager(), new InjectionConstructor("Development"));
+            container.RegisterType<IUnitOfWork, UnitOfWork>(new HierarchicalLifetimeManager(), new InjectionConstructor("DevelopmentHouseCristian"));
             container.RegisterType<IUserStore<IdentityUser, Guid>, UserStore>(new TransientLifetimeManager());
             container.RegisterType<RoleStore>(new TransientLifetimeManager());
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));

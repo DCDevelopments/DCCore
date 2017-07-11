@@ -28,12 +28,13 @@ namespace DCCore.WebMvc.Utils
         {
             using (var client = new SmtpClient())
             {
-                client.Host = "";
-                client.Port = 25;
+                client.Host = "in.mailjet.com";
+                client.Port = 587;
                 client.EnableSsl = true;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 //client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
                 client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential("pepe", "pepesecret");
+                client.Credentials = new NetworkCredential("2272066c6f5b15339ca799e8037a5b6c", "3583d8d4e0fbcb5770ca4734d5d0d9f8");
 
                 var from = new MailAddress("no-reply@example.com");
                 var to = new MailAddress(email);
@@ -42,7 +43,7 @@ namespace DCCore.WebMvc.Utils
                 {
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = true                    
+                    IsBodyHtml = false                    
                 };
                 await client.SendMailAsync(mailMessage);
             }
